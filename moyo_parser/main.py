@@ -22,7 +22,7 @@ def clean_description_html(raw_html):
     empty_element_count = result.count('')
     for i in range(0, empty_element_count):
         result.remove('')
-    result = list(map(lambda string: ('\t' + string), result))
+    result = list(map(lambda string: ('  ' + string), result))
     return '\n'.join(result)
 
 
