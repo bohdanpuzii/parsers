@@ -78,7 +78,7 @@ def ikea_info_pretty_view(description_list):
         description_list.remove(extra_text)
     except:
         pass
-    description_list = list(map(lambda string: '\t' + string, description_list))
+    description_list = list(map(lambda string: '   ' + string, description_list))
     return '\n'.join(description_list)
 
 
