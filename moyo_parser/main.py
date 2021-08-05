@@ -1,26 +1,30 @@
 from bs4 import BeautifulSoup
 
 
-def clear_moyo_html(raw_characteristics):
+def clear_moyo_characteristics_html(raw_characteristics):
+    characteristics_list = []
+    soup = BeautifulSoup(raw_characteristics, 'html.parser')
+    for td in soup.select('td'):
+        characteristics_list.append(td.text)
+    return list(map(lambda string: string.strip(' '), characteristics_list))
+
+
+def clear_moyo_description_html(raw_characteristics):
     soup = BeautifulSoup(raw_characteristics, 'html.parser')
     text = [string for string in soup.strings]
     return text
 
 
-def moyo_characteristics_pretty_view(description_list):
-    description_list = remove_extra_elements(description_list)
-    grouped_by_2 = [description_list[n:n + 2] for n in range(0, len(description_list), 2)]
-    return '\n'.join(list(map(' : '.join, grouped_by_2)))
-
-
-def remove_extra_elements(characteristics_list):
+def moyo_characteristics_pretty_view(characteristics_list):
     pos = None
     searched_element = 'Додатково'
     try:
         pos = characteristics_list.index(searched_element)
     except Exception:
         pass
-    return list(map(lambda string: string.strip(' '), characteristics_list[0:pos]))
+    cleared_characteristics = list(map(lambda string: string.strip(' '), characteristics_list[0:pos]))
+    grouped_by_2 = [cleared_characteristics[n:n + 2] for n in range(0, len(cleared_characteristics), 2)]
+    return '\n'.join(list(map(' : '.join, grouped_by_2)))
 
 
 def moyo_description_pretty_view(description_list):
@@ -29,76 +33,70 @@ def moyo_description_pretty_view(description_list):
 
 
 if __name__ == '__main__':
-    raw_html_characteristics = '<tbody><tr class="product_characteristics_list_item"><td class="key">Артикул</td><td ' \
-                               'class="value">F2J3HS2W</td></tr><tr class="product_characteristics_list_item"><td clas' \
-                               's="key">Штрихкод</td><td class="value">8806098648689</td></tr><tr class="product_chara' \
-                               'cteristics_list_item"><td class="key">Тип</td><td class="value"><a href="/ua/bt/kbt/st' \
-                               'iralnie-mashiny/tip_polnogabaritnye/">Повногабаритні 48-65 см</a></td></tr><tr class="p' \
-                               'roduct_characteristics_list_item"><td class="key">Модель</td><td class="value">F2J3HS2W<' \
-                               '/td></tr><tr class="product_characteristics_list_item"><td class="key">Вид прання</td><' \
-                               'td class="value">Водою</td></tr><tr class="product_characteristics_list_item"><td class' \
-                               '="key">Технологія</td><td class="value">6 Motion, Smart Diagnosis, SpaSteam</td></tr><t' \
-                               'r class="product_characteristics_list_item"><td class="key">Тип двигуна</td><td class="' \
-                               'value"><a href="/ua/bt/kbt/stiralnie-mashiny/invertornyyi/">Інверторний</a></td></tr><t' \
-                               'r class="product_characteristics_list_item"><td class="key">Клас прання</td><td class=' \
-                               '"value">A</td></tr><tr class="product_characteristics_list_item"><td class="key">Клас в' \
-                               'іджимання</td><td class="value">B</td></tr><tr class="product_characteristics_list_item' \
-                               '"><td class="key">Клас енергоспоживання</td><td class="value"><a href="/ua/bt/kbt/stira' \
-                               'lnie-mashiny/klass_energopotrebleniya_a_1/">A</a></td></tr><tr class="product_character' \
-                               'istics_list_item"><td class="key">Споживання води при пранні, л</td><td class="value">' \
-                               '56</td></tr><tr class="product_characteristics_list_item" style="display: none;"><td c' \
-                               'lass="key">Швидкість віджимання (об/хв)</td><td class="value">1200</td></tr><tr class=' \
-                               '"product_characteristics_list_item" style="display: none;"><td class="key">Тип заванта' \
-                               'ження</td><td class="value"><a href="/ua/bt/kbt/stiralnie-mashiny/tip_zagruzki_frontal' \
-                               'naya/">Фронтальне</a></td></tr><tr class="product_characteristics_list_item" style="d' \
-                               'isplay: none;"><td class="key">Завантаження білизни, кг</td><td class="value">7</td></' \
-                               'tr><tr class="product_characteristics_list_item" style="display: none;"><td class="ke' \
-                               'y">Споживання електроенергії, кВт/рік</td><td class="value">1,06</td></tr><tr class="' \
-                               'product_characteristics_list_item" style="display: none;"><td class="key">Рівень шуму ' \
-                               'при пранні, дБ</td><td class="value">55</td></tr><tr class="product_characteristics_l' \
-                               'ist_item" style="display: none;"><td class="key">Рівень шуму при віджиманні, дБ</td><' \
-                               'td class="value">73</td></tr><tr class="product_characteristics_list_item" style="dis' \
-                               'play: none;"><td class="key">Матеріал бака</td><td class="value">Нержавіюча сталь</td>' \
+    raw_html_characteristics = '<tbody><tr class="product_characteristics_list_item"><td class="key">Артикул</td><td c' \
+                               'lass="value">EW6S326SUI</td></tr><tr class="product_characteristics_list_item"><td clas' \
+                               's="key">Штрихкод</td><td class="value">7332543747757</td></tr><tr class="product_charac' \
+                               'teristics_list_item"><td class="key">Тип</td><td class="value"><a href="/ua/bt/kbt/stir' \
+                               'alnie-mashiny/tip_uzkie/">Вузькі 32-47 см</a></td></tr><tr class="product_characteristi' \
+                               'cs_list_item"><td class="key">Модель</td><td class="value">EW6S326SUI</td></tr><tr clas' \
+                               's="product_characteristics_list_item"><td class="key">Вид прання</td><td class="value"' \
+                               '><a href="/ua/bt/kbt/stiralnie-mashiny/vid_stirki_parom_i_vodoyi/">Парою і водою</a></t' \
+                               'd></tr><tr class="product_characteristics_list_item"><td class="key">Технологія</td><td' \
+                               ' class="value">Fuzzy Logic</td></tr><tr class="product_characteristics_list_item"><td ' \
+                               'class="key">Тип двигуна</td><td class="value"><a href="/ua/bt/kbt/stiralnie-mashiny/in' \
+                               'vertornyyi/">Інверторний</a></td></tr><tr class="product_characteristics_list_item"><' \
+                               'td class="key">Клас прання</td><td class="value">A</td></tr><tr class="product_charac' \
+                               'teristics_list_item"><td class="key">Клас віджимання</td><td class="value">B</td></tr' \
+                               '><tr class="product_characteristics_list_item"><td class="key">Клас енергоспоживання<' \
+                               '/td><td class="value"><a href="/ua/bt/kbt/stiralnie-mashiny/klass_energopotrebleniya_' \
+                               'a_3/">A+++</a></td></tr><tr class="product_characteristics_list_item"><td class="key">' \
+                               'Споживання води при пранні, л</td><td class="value">9400</td></tr><tr class="product_c' \
+                               'haracteristics_list_item" style="display: none;"><td class="key">Швидкість віджимання ' \
+                               '(об/хв)</td><td class="value">1200</td></tr><tr class="product_characteristics_list_i' \
+                               'tem" style="display: none;"><td class="key">Тип завантаження</td><td class="value"><a' \
+                               ' href="/ua/bt/kbt/stiralnie-mashiny/tip_zagruzki_frontalnaya/">Фронтальне</a></td></t' \
+                               'r><tr class="product_characteristics_list_item" style="display: none;"><td class="key"' \
+                               '>Завантаження білизни, кг</td><td class="value">6</td></tr><tr class="product_characte' \
+                               'ristics_list_item" style="display: none;"><td class="key">Споживання електроенергії, к' \
+                               'Вт/рік</td><td class="value">Немає даних</td></tr><tr class="product_characteristics_l' \
+                               'ist_item" style="display: none;"><td class="key">Рівень шуму при пранні, дБ</td><td cla' \
+                               'ss="value">54</td></tr><tr class="product_characteristics_list_item" style="display: n' \
+                               'one;"><td class="key">Рівень шуму при віджиманні, дБ</td><td class="value">77</td></t' \
+                               'r><tr class="product_characteristics_list_item" style="display: none;"><td class="key' \
+                               '">Матеріал бака</td><td class="value">Полімер</td></tr><tr class="product_characterist' \
+                               'ics_list_item" style="display: none;"><td class="key">Діапазон температур прання</td>' \
+                               '<td class="value">Немає даних</td></tr><tr class="product_characteristics_list_item" ' \
+                               'style="display: none;"><td class="key">Кількість програм</td><td class="value">14</td>' \
                                '</tr><tr class="product_characteristics_list_item" style="display: none;"><td class="k' \
-                               'ey">Діапазон температур прання</td><td class="value">до 95</td></tr><tr class="product' \
-                               '_characteristics_list_item" style="display: none;"><td class="key">Кількість програм</' \
-                               'td><td class="value">10</td></tr><tr class="product_characteristics_list_item" style=' \
-                               '"display: none;"><td class="key">Програми</td><td class="value"> швидко 30 , делікатн' \
-                               'а , одяг малюка , повсякденна прання, Полоскання+віджим, змішані тканини, Спортивний од' \
-                               'яг, Бавовна, Бавовна макс, Вовна</td></tr><tr class="product_characteristics_list_item"' \
-                               ' style="display: none;"><td class="key"> Габарити (ВхШхГ), см </td><td class="value">60' \
-                               'х44х85</td></tr><tr class="product_characteristics_list_item" style="display: none;"><' \
-                               'td class="key">Ширина, см</td><td class="value">60</td></tr><tr class="product_charact' \
-                               'eristics_list_item" style="display: none;"><td class="key"> Висота, см </td><td class=' \
-                               '"value">85</td></tr><tr class="product_characteristics_list_item" style="display: none' \
-                               ';"><td class="key">Глибина, см</td><td class="value">44</td></tr><tr class="product_ch' \
-                               'aracteristics_list_item" style="display: none;"><td class="key"> Вага </td><td class="v' \
-                               'alue">59</td></tr><tr class="product_characteristics_list_item" style="display: none;">' \
-                               '<td class="key"> Колір </td><td class="value"><a href="/ua/bt/kbt/stiralnie-mashiny/bel' \
-                               'yyi/">Білий</a></td></tr><tr class="product_characteristics_list_item" style="display:' \
-                               ' none;"><td class="key">Колір (основний)</td><td class="value">Білий</td></tr><tr cla' \
-                               'ss="product_characteristics_list_item" style="display: none;"><td class="key">Особливо' \
-                               'сті</td><td class="value"> LED дисплей , Звуковий сигнал, Сенсорний дисплей, таймер н' \
-                               'а прання </td></tr><tr class="product_characteristics_list_item" style="display: non' \
-                               'e;"><td class="key"> SMART Функції </td><td class="value">Smart Diagnosis</td></tr><' \
-                               'tr class="product_characteristics_list_item" style="display: none;"><td class="key">До' \
-                               'даткові опції</td><td class="value">Захист від дітей, очищення барабана , Система пено' \
-                               'подавленія </td></tr><tr class="product_characteristics_list_item" style="display: non' \
-                               'e;"><td class="key"> Гарантія, міс. </td><td class="value">12</td></tr><tr class="prod' \
-                               'uct_characteristics_list_item" style="display: none;"><td class="key"> Країна-виробник' \
-                               ' </td><td class="value">Китай</td></tr><tr class="product_characteristics_list_item" st' \
-                               'yle="display: none;"><td class="key">Додатково</td><td class="value"><a href="/ua/bt/kbt' \
-                               '/stiralnie-mashiny/stiralnye-mashiny-1200-oborotov/"> Пральні машини 1200 оборотів </a>' \
-                               ', <a href="/ua/bt/kbt/stiralnie-mashiny/stiralnye-mashiny-s-nerzhaveyushhim-bakom/"> П' \
-                               'ральні машини з нержавіючим баком </a>, <a href="/ua/bt/kbt/stiralnie-mashiny/stiraln' \
-                               'ye-mashiny-s-nizkim-urovnem-shuma/"> Пральні машини з низьким рівнем шуму </a>, <a h' \
-                               'ref="/ua/bt/kbt/stiralnie-mashiny/deshevye-stiralnye-mashiny/"> Дешеві пральні машини ' \
-                               '</a>, <a href="/ua/bt/kbt/stiralnie-mashiny/lg-7kg/"> Пральні машини LG 7 кг </a>, <a' \
-                               ' href="/ua/bt/kbt/stiralnie-mashiny/lg-frontalnaya-zagruzka/"> Пральні машини LG з ' \
-                               'фронтальним завантаженням </a></td></tr></tbody>'
-    characteristics = moyo_characteristics_pretty_view(clear_moyo_html(raw_html_characteristics))
+                               'ey">Програми</td><td class="value">антиаллергенная з парою, швидке прання , Верхній од' \
+                               'яг, увімк/вимк, делікатна , дитячу білизну , Джинсова тканина , Віджимання + слив , пол' \
+                               'оскання, синтетика, Спорт , Бавовна, Бавовна Еко , шовк , шерсть плюс</td></tr><tr class' \
+                               '="product_characteristics_list_item" style="display: none;"><td class="key"> Габарити (Вх' \
+                               'ШхГ), см </td><td class="value">84,3х59,5х41,1</td></tr><tr class="product_characteristi' \
+                               'cs_list_item" style="display: none;"><td class="key">Ширина, см</td><td class="value">5' \
+                               '9,5</td></tr><tr class="product_characteristics_list_item" style="display: none;"><td cl' \
+                               'ass="key"> Висота, см </td><td class="value">84,3</td></tr><tr class="product_characteri' \
+                               'stics_list_item" style="display: none;"><td class="key">Глибина, см</td><td class="valu' \
+                               'e">41,1</td></tr><tr class="product_characteristics_list_item" style="display: none;"><' \
+                               'td class="key"> Вага </td><td class="value">58,5</td></tr><tr class="product_characteris' \
+                               'tics_list_item" style="display: none;"><td class="key"> Колір </td><td class="value"><a' \
+                               ' href="/ua/bt/kbt/stiralnie-mashiny/belyyi/">Білий</a></td></tr><tr class="product_char' \
+                               'acteristics_list_item" style="display: none;"><td class="key">Колір (основний)</td><td c' \
+                               'lass="value">Білий</td></tr><tr class="product_characteristics_list_item" style="displa' \
+                               'y: none;"><td class="key">Особливості</td><td class="value"> LED дисплей , <a href="/ua' \
+                               '/bt/kbt/stiralnie-mashiny/zashchita_ot_deteyi/">Захист від дітей</a>, <a href="/ua/bt/k' \
+                               'bt/stiralnie-mashiny/stiralnye-mashiny-s-polnoj-zashhitoj-ot-protechek/">Захист від прот' \
+                               'ікання</a>, Контроль дисбалансу , контроль піноутворення, Таймер відстрочки початку пра' \
+                               'ння</td></tr><tr class="product_characteristics_list_item" style="display: none;"><td c' \
+                               'lass="key">Додаткові опції</td><td class="value">регуліромие ніжки</td></tr><tr class="p' \
+                               'roduct_characteristics_list_item" style="display: none;"><td class="key"> Гарантія, міс' \
+                               '. </td><td class="value">12</td></tr><tr class="product_characteristics_list_item" style' \
+                               '="display: none;"><td class="key"> Країна-виробник </td><td class="value">Україна</td></' \
+                               'tr><tr class="product_characteristics_list_item" style="display: none;"><td class="key' \
+                               '">Додатково</td><td class="value"><a href="/ua/bt/kbt/stiralnie-mashiny/stiralnye-mashin' \
+                               'y-1200-oborotov/"> Пральні машини 1200 оборотів </a>, <a href="/ua/bt/kbt/stiralnie-mashiny/deshevye-stiralnye-mashiny/"> Дешеві пральні машини </a>, <a href="/ua/bt/kbt/stiralnie-mashiny/electrolux-6-kg/"> Пральні машини ELECTROLUX 6 кг </a>, <a href="/ua/bt/kbt/stiralnie-mashiny/uzkie-6kg/"> Вузькі пральні машини 6 кг </a>, <a href="/ua/bt/kbt/stiralnie-mashiny/electrolux-frontalnaya-zagruzka/"> Пральні машини ELECTROLUX з фронтальним завантаженням </a>, <a href="/ua/bt/kbt/stiralnie-mashiny/electrolux-uzkiye/"> Вузькі пральні машини ELECTROLUX </a></td></tr></tbody>'
+    characteristics = moyo_characteristics_pretty_view(clear_moyo_characteristics_html(raw_html_characteristics))
     print(characteristics)
-    # write characteristics to db
     raw_html_description = '<h2 style="text-align:center"><div class="textimg-wrap" style="text-align: center;"><div cl' \
                            'ass="textimg-block" style="width: 1000px; height: auto;"><img class="lazy-intersection lazy' \
                            '-space intersection-observing" src="https://img.moyo.ua/img/products_desc/4730/473062_15991' \
@@ -176,6 +174,6 @@ if __name__ == '__main__':
                            'h="aHR0cHM6Ly9pbWcubW95by51YS9pbWcvcHJvZHVjdHNfZGVzYy80NzMwLzQ3MzA2Ml8xNTk5MTMzNzQ0XzguanBn"' \
                            ' srcset="/images/bx_loader_grey.gif"><div class="lazy-space-holder" style="padding-top: 53.' \
                            '4%;"></div></div></div><p></p>'
-    description = moyo_description_pretty_view(clear_moyo_html(raw_html_description))
+    description = moyo_description_pretty_view(clear_moyo_description_html(raw_html_description))
     print(description)
     # write description to db
