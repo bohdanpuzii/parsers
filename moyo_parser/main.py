@@ -48,11 +48,6 @@ def clear_moyo_reviews_html(raw_reviews):
     return comments_list
 
 
-def moyo_reviews_pretty_view(reviews_list):
-    pretty_reviews_list = list(map(lambda string: ('  ' + string), reviews_list))
-    return '\n'.join(pretty_reviews_list)
-
-
 if __name__ == '__main__':
     raw_html_characteristics = '<tbody><tr class="product_characteristics_list_item"><td class="key">Артикул</td><td clas' \
                                's="value">EW6S326SUI</td></tr><tr class="product_characteristics_list_item"><td class="key"' \
