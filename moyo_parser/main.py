@@ -32,6 +32,27 @@ def moyo_description_pretty_view(description_list):
     return '\n'.join(description_list)
 
 
+def clear_moyo_reviews_html(raw_reviews):
+    comments_list = []
+    comment = {}
+    soup = BeautifulSoup(raw_reviews, 'html.parser')
+    for item in soup.find_all('div', {'class': 'product_review-item_block js-review-item-block'}):
+        comment['author'] = item.find('div', {'class': 'product_review-item_username'}).text
+        comment['date'] = item.find('div', {'class': 'product_review-item_date'}).text
+        comment['body'] = item.find('div', {'class': 'product_review-item_text'}).text
+        comment['advantages'] = item.find('div', {'class': 'product_review-item_advantages_text'}).text
+        comment['disadvantages'] = item.find('div', {'class': 'product_review-item_advantages negative'}).find('div',
+                                                                                                               'product_review-item_advantages_text').text
+        comment_copy = comment.copy()
+        comments_list.append(comment_copy)
+    return comments_list
+
+
+def moyo_reviews_pretty_view(reviews_list):
+    pretty_reviews_list = list(map(lambda string: ('  ' + string), reviews_list))
+    return '\n'.join(pretty_reviews_list)
+
+
 if __name__ == '__main__':
     raw_html_characteristics = '<tbody><tr class="product_characteristics_list_item"><td class="key">Артикул</td><td clas' \
                                's="value">EW6S326SUI</td></tr><tr class="product_characteristics_list_item"><td class="key"' \
@@ -98,7 +119,7 @@ if __name__ == '__main__':
                                ' </a>, <a href="/ua/bt/kbt/stiralnie-mashiny/electrolux-uzkiye/"> Вузькі пральні машини ELECTR' \
                                'OLUX </a></td></tr></tbody>'
     characteristics = moyo_characteristics_pretty_view(clear_moyo_characteristics_html(raw_html_characteristics))
-    print(characteristics)
+    # print(characteristics)
     raw_html_description = '<h2 style="text-align:center"><div class="textimg-wrap" style="text-align: center;"><div cl' \
                            'ass="textimg-block" style="width: 1000px; height: auto;"><img class="lazy-intersection lazy' \
                            '-space intersection-observing" src="https://img.moyo.ua/img/products_desc/4730/473062_15991' \
@@ -177,5 +198,35 @@ if __name__ == '__main__':
                            ' srcset="/images/bx_loader_grey.gif"><div class="lazy-space-holder" style="padding-top: 53.' \
                            '4%;"></div></div></div><p></p>'
     description = moyo_description_pretty_view(clear_moyo_description_html(raw_html_description))
-    print(description)
+    # print(description)
     # write description to db
+    raw_html_reviews = '<div class="product_review-item js-comment-item"><div class="product_review-item_img empty"><span>І</span></div><div class="product_review-item_content" ' \
+                       'id="comment_770040"><div class="product_review-item_block js-review-item-block" itemprop="review" itemscope="" itemtype="http://schema.org/Review" id="comment_770040">' \
+                       '<meta itemprop="name" content=" Смартфон Samsung Galaxy A12 4/64GB Red "><div class="product_review-item_head"><div class="product_review-item_username" itemprop="author">' \
+                       'Інна</div><div class="product_review-item_rate"><div class="rate-star_container"><div class="rate-star active-start"></div><div class="rate-star active-start"></div><di' \
+                       'v class="rate-star active-start"></div><div class="rate-star active-start"></div><div class="rate-star active-start"></div></div></div><div class="product_review-item_' \
+                       'usercheck"></div><div class="hidden_comment" itemprop="reviewRating" itemscope="" itemtype="http://schema.org/Rating"><meta itemprop="worstRating" content="0"><meta it' \
+                       'emprop="bestRating" content="5"><meta itemprop="ratingValue" content="5"></div><div class="product_review-item_date">20 квітня 2021, 11:02</div></div><div class="prod' \
+                       'uct_review-item_body"><div class="product_review-item_text" itemprop="reviewBody"><p>Телефон сподобався. В порівнянні з моїм попереднім самсунгом J3- ракета)))) Стил' \
+                       'ьний і батареї вистачає майже на 2 дні.</p></div><div class="product_review-item_advantages"><div class="product_review-item_advantages_title">Переваги:</div><div cla' \
+                       'ss="product_review-item_advantages_text"> Батарея,камера </div></div><div class="product_review-item_advantages negative"><div class="product_review-item_advantages_' \
+                       'title">Недоліки:</div><div class="product_review-item_advantages_text"> Не знайшла </div></div></div><div class="product_review-item_footer"><div class="product_revi' \
+                       'ew-item_footer_section"><div class="product_review-item_to-answer js-answer-form-btn-action">Відповісти</div></div><div class="product_review-item_likes positive">' \
+                       '<div class="product_review-item_likes_text"> Відгук був корисний? </div><button id="like-comment-1" data-product_id="480668" data-id="770040" data-gtm-track="like' \
+                       'Comment" class="product_review-item_likes_btn js-positive-like"></button><div class="product_review-item_likes_count js-count-like">1</div></div></div></div><div ' \
+                       'class="product_answer-form-holder js-answer-form-holder"></div></div></div><div class="product_review-item js-comment-item"><div class="product_review-item_img emp' \
+                       'ty"><span>Е</span></div><div class="product_review-item_content" id="comment_767793"><div class="product_review-item_block js-review-item-block" itemprop="review" ' \
+                       'itemscope="" itemtype="http://schema.org/Review" id="comment_767793"><meta itemprop="name" content=" Смартфон Samsung Galaxy A12 4/64GB Red "><div class="product_r' \
+                       'eview-item_head"><div class="product_review-item_username" itemprop="author">Евгения</div><div class="product_review-item_rate"><div class="rate-star_container"><d' \
+                       'iv class="rate-star active-start"></div><div class="rate-star active-start"></div><div class="rate-star active-start"></div><div class="rate-star active-start"></d' \
+                       'iv><div class="rate-star active-start"></div></div></div><div class="hidden_comment" itemprop="reviewRating" itemscope="" itemtype="http://schema.org/Rating"><meta' \
+                       ' itemprop="worstRating" content="0"><meta itemprop="bestRating" content="5"><meta itemprop="ratingValue" content="5"></div><div class="product_review-item_date">24' \
+                       ' березня 2021, 04:23</div></div><div class="product_review-item_body"><div class="product_review-item_text" itemprop="reviewBody"><p>Брали на подарок ребенку. Телеф' \
+                       'он за свою цену хороший, быстрый, приятный большой экран. Внешне симпатичный дизайн. Подарком остались довольны.</p></div><div class="product_review-item_advantages' \
+                       '"><div class="product_review-item_advantages_title">Переваги:</div><div class="product_review-item_advantages_text"></div></div><div class="product_review-item_adva' \
+                       'ntages negative"><div class="product_review-item_advantages_title">Недоліки:</div><div class="product_review-item_advantages_text"></div></div></div><div class="pro' \
+                       'duct_review-item_footer"><div class="product_review-item_footer_section"><div class="product_review-item_to-answer js-answer-form-btn-action">Відповісти</div></div>' \
+                       '<div class="product_review-item_likes positive"><div class="product_review-item_likes_text"> Відгук був корисний? </div><button id="like-comment-2" data-product_id' \
+                       '="480668" data-id="767793" data-gtm-track="likeComment" class="product_review-item_likes_btn js-positive-like"></button><div class="product_review-item_likes_count' \
+                       ' js-count-like"></div></div></div></div><div class="product_answer-form-holder js-answer-form-holder"></div></div></div>'
+    print(clear_moyo_reviews_html(raw_html_reviews))
