@@ -20,33 +20,34 @@ raw_chars = '<li>\n<span class="prop-name"> Артикул: </span>\n<span class
             'value">Жіноче</span>\n</li>\n<li>\nВид носку взуття:\n<span>Круглий</span>\n</li>'
 
 
-# def clear_intertop_characteristics_html(raw_characteristics):
-#     soup = BeautifulSoup(raw_characteristics, 'html.parser')
-#     chars_text = [string for string in soup.strings]
-#     cleared_text = list(filter(lambda string: string != ' ' and string != ', ', chars_text))
-#     text_without_extra_spaces = list(map(lambda string: string.strip(' '), cleared_text))
-#     return text_without_extra_spaces
-#
-#
-# def intertop_characteristics_pretty_view(description_list):
-#     grouped_by_2 = [description_list[n:n + 2] for n in range(0, len(description_list), 2)]
-#     return '\n'.join(list(map(' '.join, grouped_by_2)))
-
-
 def clear_intertop_characteristics_html(raw_characteristics):
-    characteristics_list = []
     soup = BeautifulSoup(raw_characteristics, 'html.parser')
-    for li in soup.select('li'):
-        characteristics_list.append(li.text.replace('\n', '').strip(' '))
-    return characteristics_list
+    chars_text = [string for string in soup.strings]
+    cleared_text = list(filter(lambda string: string != ' ' and string != ', ' and string != '\n', chars_text))
+    text_without_extra_spaces = list(map(lambda string: string.strip(' ').replace('\n',''), cleared_text))
+    return text_without_extra_spaces
 
 
-def intertop_characteristics_pretty_view(characteristics_list):
-    return '\n'.join(characteristics_list)
+def intertop_characteristics_pretty_view(description_list):
+    grouped_by_2 = [description_list[n:n + 2] for n in range(0, len(description_list), 2)]
+    return '\n'.join(list(map(' '.join, grouped_by_2)))
+
+
+# def clear_intertop_characteristics_html(raw_characteristics):
+#     characteristics_list = []
+#     soup = BeautifulSoup(raw_characteristics, 'html.parser')
+#     for li in soup.select('li'):
+#         characteristics_list.append(li.text.replace('\n', '').strip(' '))
+#     return characteristics_list
+#
+#
+# def intertop_characteristics_pretty_view(characteristics_list):
+#     return '\n'.join(characteristics_list)
 
 
 def clear_intertop_description_html(raw_characteristics):
     soup = BeautifulSoup(raw_characteristics, 'html.parser')
+    print(soup.text)
     text = [string.replace('\n', '') for string in soup.strings]
     return text
 
@@ -58,4 +59,4 @@ def intertop_description_pretty_view(description_list):
 
 if __name__ == '__main__':
     print(intertop_characteristics_pretty_view(clear_intertop_characteristics_html(raw_chars)))
-    print(intertop_description_pretty_view(clear_intertop_description_html(raw_desc)))
+    #print(intertop_description_pretty_view(clear_intertop_description_html(raw_desc)))
