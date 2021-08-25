@@ -224,4 +224,4 @@ if __name__ == '__main__':
                        '<div class="product_review-item_likes positive"><div class="product_review-item_likes_text"> Відгук був корисний? </div><button id="like-comment-2" data-product_id' \
                        '="480668" data-id="767793" data-gtm-track="likeComment" class="product_review-item_likes_btn js-positive-like"></button><div class="product_review-item_likes_count' \
                        ' js-count-like"></div></div></div></div><div class="product_answer-form-holder js-answer-form-holder"></div></div></div>'
-    print(clear_moyo_reviews_html(raw_html_reviews))
+    #print(clear_moyo_reviews_html(raw_html_reviews))
