@@ -1,25 +1,23 @@
 from bs4 import BeautifulSoup
 
-raw_desc = 'Жіночі черевики ECCO SOLICE (42010301291) - ідеально ' \
-           'повторюють вигини стопи та захищають від вологи.<br> ' \
-           'Особливості:<br> • Верх виконаний з промасленого нубук' \
-           'у та текстилю<br> • Застібка-блискавка і шнурки<br> • ' \
-           'Мембрана GoreTex® захищає від води<br> • Лита підошва ' \
-           'FLUIDFORM ™ повторює вигини стопи, забезпечує легкість ' \
-           'ходи<br> • Гумовий протектор для кращого зчеплення з поверхнею'
+raw_desc = 'Текстильні сліпони Skechers Seager - Stat (49481 NVY) з акуратним мінімалістичним верхом, фірмовою устілко' \
+           'ю і пружною підошвою.<br> Особливості:<br> • Безшовний сітчастий верх з оригінальним кантом<br> • Спеціальн' \
+           'а підкладка Bio-Dri ™ підтримує відмінну циркуляцію повітря всередині взуття і швидко сохне<br> • Мяка устілка' \
+           ' з охолодженням і ефектом памяті стопи Air Cooled Memory Foam ™<br> • Пружна підошва поглинає удари<br> • Можна' \
+           ' прати в пральній машині'
 
-raw_chars = '<li> <span class="prop-name"> Артикул: </span> <span class="prop-value"> PW188 </span> </li> <li> <span clas' \
-            's="prop-name"> Бренд: </span> <span class="prop-value"> <a href="/ua/catalog/zhenskaya_obuv/brand-panama-jack' \
-            '-good_type-sapogi/">Panama Jack</a> </span> </li> <li> Верх: <span class="prop-value"> шкіра </span> </li> <li' \
-            '> Матеріал підкладки: <span class="prop-value"> <a href="/ua/catalog/zhenskaya_obuv/good_type-sapogi-lining_m' \
-            'aterial-sherst/">вовна</a> </span> </li> <li> Матеріал підошви: <span class="prop-value">поліуретан</span> </l' \
-            'i> <li> Колір: <span class="prop-value"> <a href="/ua/catalog/zhenskaya_obuv/color-korichnevyy-good_type-sapog' \
-            'i/"> Коричневий </a> </span> </li> <li> Вид товару: <span class="prop-value"> <a href="/ua/catalog/zhenskaya_obu' \
-            'v/good_type-sapogi/"> Чоботи та ботфорти </a> </span> </li> <li> Сезон: <a href="/ua/catalog/zhenskaya_obuv/goo' \
-            'd_type-sapogi-season-osen-zima/"> <span class="prop-value">Осінь-Зима 2019</span> </a> </li> <li> Стиль: <span c' \
-            'lass="prop-value">Casual</span> </li> <li> Країна: <span class="prop-value">Іспанія</span> </li> <li> Стать: <spa' \
-            'n class="prop-value">Жіноче</span> </li> <li> Вид носку взуття: <span>Круглий</span> </li> <li> Вид підошви: <spa' \
-            'n>Каблук-цеглинка</span> </li> '
+raw_chars = '<li>\n<span class="prop-name"> Артикул: </span>\n<span class="prop-value">\nKW6150 </span>\n</li>\n<li>\n' \
+            '<span class="prop-name"> Бренд: </span>\n<span class="prop-value">\n<a href="/ua/catalog/zhenskaya_obuv/brand' \
+            '-skechers-good_type-clipony/">Skechers</a>\n</span>\n</li>\n<li>\nВерх:\n<span class="prop-value">\nтекстиль ' \
+            '</span>\n</li>\n<li>\nМатеріал підкладки:\n<span class="prop-value">\n<a href="/ua/catalog/zhenskaya_obuv/good' \
+            '_type-clipony-lining_material-tekstil/">текстиль</a>\n</span>\n</li>\n<li>\nМатеріал підошви:\n<span class=' \
+            '"prop-value">етиленвінілацетат (ЕВА)</span>\n</li>\n<li>\nКолір:\n<span class="prop-value">\n<a href="/ua/' \
+            'catalog/zhenskaya_obuv/color-siniy-good_type-clipony/"> Синій </a> </span>\n</li>\n<li>\nВид товару:\n<span' \
+            ' class="prop-value">\n<a href="/ua/catalog/zhenskaya_obuv/good_type-clipony/"> Сліпони та еспадрильї </a> ' \
+            '</span>\n</li>\n<li>\nСезон:\n<a href="/ua/catalog/zhenskaya_obuv/good_type-clipony-season-vesna-leto/"> ' \
+            '<span class="prop-value">Весна-Літо 2021</span>\n</a> </li>\n<li>\nСтиль:\n<span class="prop-value">Casual' \
+            '</span>\n</li>\n<li>\nКраїна:\n<span class="prop-value">Китай</span>\n</li>\n<li>\nСтать:\n<span class="prop-' \
+            'value">Жіноче</span>\n</li>\n<li>\nВид носку взуття:\n<span>Круглий</span>\n</li>'
 
 
 # def clear_intertop_characteristics_html(raw_characteristics):
@@ -39,7 +37,7 @@ def clear_intertop_characteristics_html(raw_characteristics):
     characteristics_list = []
     soup = BeautifulSoup(raw_characteristics, 'html.parser')
     for li in soup.select('li'):
-        characteristics_list.append(li.text.strip(' '))
+        characteristics_list.append(li.text.replace('\n', '').strip(' '))
     return characteristics_list
 
 
@@ -49,7 +47,7 @@ def intertop_characteristics_pretty_view(characteristics_list):
 
 def clear_intertop_description_html(raw_characteristics):
     soup = BeautifulSoup(raw_characteristics, 'html.parser')
-    text = [string for string in soup.strings]
+    text = [string.replace('\n', '') for string in soup.strings]
     return text
 
 
@@ -59,5 +57,5 @@ def intertop_description_pretty_view(description_list):
 
 
 if __name__ == '__main__':
-    print(((intertop_characteristics_pretty_view(clear_intertop_characteristics_html(raw_chars)))))
-    #print(intertop_description_pretty_view(clear_intertop_description_html(raw_desc)))
+    print(intertop_characteristics_pretty_view(clear_intertop_characteristics_html(raw_chars)))
+    print(intertop_description_pretty_view(clear_intertop_description_html(raw_desc)))
