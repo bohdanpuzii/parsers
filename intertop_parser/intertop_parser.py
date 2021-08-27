@@ -47,16 +47,16 @@ def intertop_characteristics_pretty_view(description_list):
 
 def clear_intertop_description_html(raw_characteristics):
     soup = BeautifulSoup(raw_characteristics, 'html.parser')
-    print(soup.text)
     text = [string.replace('\n', '') for string in soup.strings]
     return text
 
 
 def intertop_description_pretty_view(description_list):
     description_list = list(map(lambda string: ('  ' + string), description_list))
+    print(description_list)
     return '\n'.join(description_list)
 
 
 if __name__ == '__main__':
     print(intertop_characteristics_pretty_view(clear_intertop_characteristics_html(raw_chars)))
-    #print(intertop_description_pretty_view(clear_intertop_description_html(raw_desc)))
+    (intertop_description_pretty_view(clear_intertop_description_html(raw_desc)))

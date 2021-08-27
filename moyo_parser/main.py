@@ -38,13 +38,14 @@ def clear_moyo_reviews_html(raw_reviews):
     soup = BeautifulSoup(raw_reviews, 'html.parser')
     for item in soup.find_all('div', {'class': 'product_review-item_block js-review-item-block'}):
         comment['author'] = item.find('div', {'class': 'product_review-item_username'}).text
-        comment['date'] = item.find('div', {'class': 'product_review-item_date'}).text
-        comment['body'] = item.find('div', {'class': 'product_review-item_text'}).text
-        comment['advantages'] = item.find('div', {'class': 'product_review-item_advantages_text'}).text
-        comment['disadvantages'] = item.find('div', {'class': 'product_review-item_advantages negative'}).find('div',
-                                                                                                               'product_review-item_advantages_text').text
-        comment_copy = comment.copy()
-        comments_list.append(comment_copy)
+        if comment['author'] != 'Менеджер':
+            comment['date'] = item.find('div', {'class': 'product_review-item_date'}).text
+            comment['body'] = item.find('div', {'class': 'product_review-item_text'}).text
+            comment['advantages'] = item.find('div', {'class': 'product_review-item_advantages_text'}).text
+            comment['disadvantages'] = item.find('div', {'class': 'product_review-item_advantages negative'}).find(
+                'div', 'product_review-item_advantages_text').text
+            comment_copy = comment.copy()
+            comments_list.append(comment_copy)
     return comments_list
 
 
@@ -195,33 +196,56 @@ if __name__ == '__main__':
     description = moyo_description_pretty_view(clear_moyo_description_html(raw_html_description))
     # print(description)
     # write description to db
-    raw_html_reviews = '<div class="product_review-item js-comment-item"><div class="product_review-item_img empty"><span>І</span></div><div class="product_review-item_content" ' \
-                       'id="comment_770040"><div class="product_review-item_block js-review-item-block" itemprop="review" itemscope="" itemtype="http://schema.org/Review" id="comment_770040">' \
-                       '<meta itemprop="name" content=" Смартфон Samsung Galaxy A12 4/64GB Red "><div class="product_review-item_head"><div class="product_review-item_username" itemprop="author">' \
-                       'Інна</div><div class="product_review-item_rate"><div class="rate-star_container"><div class="rate-star active-start"></div><div class="rate-star active-start"></div><di' \
-                       'v class="rate-star active-start"></div><div class="rate-star active-start"></div><div class="rate-star active-start"></div></div></div><div class="product_review-item_' \
-                       'usercheck"></div><div class="hidden_comment" itemprop="reviewRating" itemscope="" itemtype="http://schema.org/Rating"><meta itemprop="worstRating" content="0"><meta it' \
-                       'emprop="bestRating" content="5"><meta itemprop="ratingValue" content="5"></div><div class="product_review-item_date">20 квітня 2021, 11:02</div></div><div class="prod' \
-                       'uct_review-item_body"><div class="product_review-item_text" itemprop="reviewBody"><p>Телефон сподобався. В порівнянні з моїм попереднім самсунгом J3- ракета)))) Стил' \
-                       'ьний і батареї вистачає майже на 2 дні.</p></div><div class="product_review-item_advantages"><div class="product_review-item_advantages_title">Переваги:</div><div cla' \
-                       'ss="product_review-item_advantages_text"> Батарея,камера </div></div><div class="product_review-item_advantages negative"><div class="product_review-item_advantages_' \
-                       'title">Недоліки:</div><div class="product_review-item_advantages_text"> Не знайшла </div></div></div><div class="product_review-item_footer"><div class="product_revi' \
-                       'ew-item_footer_section"><div class="product_review-item_to-answer js-answer-form-btn-action">Відповісти</div></div><div class="product_review-item_likes positive">' \
-                       '<div class="product_review-item_likes_text"> Відгук був корисний? </div><button id="like-comment-1" data-product_id="480668" data-id="770040" data-gtm-track="like' \
-                       'Comment" class="product_review-item_likes_btn js-positive-like"></button><div class="product_review-item_likes_count js-count-like">1</div></div></div></div><div ' \
-                       'class="product_answer-form-holder js-answer-form-holder"></div></div></div><div class="product_review-item js-comment-item"><div class="product_review-item_img emp' \
-                       'ty"><span>Е</span></div><div class="product_review-item_content" id="comment_767793"><div class="product_review-item_block js-review-item-block" itemprop="review" ' \
-                       'itemscope="" itemtype="http://schema.org/Review" id="comment_767793"><meta itemprop="name" content=" Смартфон Samsung Galaxy A12 4/64GB Red "><div class="product_r' \
-                       'eview-item_head"><div class="product_review-item_username" itemprop="author">Евгения</div><div class="product_review-item_rate"><div class="rate-star_container"><d' \
-                       'iv class="rate-star active-start"></div><div class="rate-star active-start"></div><div class="rate-star active-start"></div><div class="rate-star active-start"></d' \
-                       'iv><div class="rate-star active-start"></div></div></div><div class="hidden_comment" itemprop="reviewRating" itemscope="" itemtype="http://schema.org/Rating"><meta' \
-                       ' itemprop="worstRating" content="0"><meta itemprop="bestRating" content="5"><meta itemprop="ratingValue" content="5"></div><div class="product_review-item_date">24' \
-                       ' березня 2021, 04:23</div></div><div class="product_review-item_body"><div class="product_review-item_text" itemprop="reviewBody"><p>Брали на подарок ребенку. Телеф' \
-                       'он за свою цену хороший, быстрый, приятный большой экран. Внешне симпатичный дизайн. Подарком остались довольны.</p></div><div class="product_review-item_advantages' \
-                       '"><div class="product_review-item_advantages_title">Переваги:</div><div class="product_review-item_advantages_text"></div></div><div class="product_review-item_adva' \
-                       'ntages negative"><div class="product_review-item_advantages_title">Недоліки:</div><div class="product_review-item_advantages_text"></div></div></div><div class="pro' \
-                       'duct_review-item_footer"><div class="product_review-item_footer_section"><div class="product_review-item_to-answer js-answer-form-btn-action">Відповісти</div></div>' \
-                       '<div class="product_review-item_likes positive"><div class="product_review-item_likes_text"> Відгук був корисний? </div><button id="like-comment-2" data-product_id' \
-                       '="480668" data-id="767793" data-gtm-track="likeComment" class="product_review-item_likes_btn js-positive-like"></button><div class="product_review-item_likes_count' \
-                       ' js-count-like"></div></div></div></div><div class="product_answer-form-holder js-answer-form-holder"></div></div></div>'
-    #print(clear_moyo_reviews_html(raw_html_reviews))
+    raw_html_reviews = '<div class="product_review-item js-comment-item"><div class="product_review-item_img empty"><span>Г</span></div>' \
+                       '<div class="product_review-item_content" id="comment_725068"><div class="product_review-item_block js-review-item-block"' \
+                       ' itemprop="review" itemscope="" itemtype="http://schema.org/Review" id="comment_725068"><meta itemprop="name" ' \
+                       'content="Смартфон Blackview BV5500Pro 3/16GB DS Black UA-VF"><div class="product_review-item_head"><div class="' \
+                       'product_review-item_username" itemprop="author">Григорий</div><div class="product_review-item_rate"><div class=' \
+                       '"rate-star_container"><div class="rate-star active-start"></div><div class="rate-star active-start"></div><div ' \
+                       'class="rate-star active-start"></div><div class="rate-star active-start"></div><div class="rate-star "></div></' \
+                       'div></div><div class="hidden_comment" itemprop="reviewRating" itemscope="" itemtype="http://schema.org/Rating"><' \
+                       'meta itemprop="worstRating" content="0"><meta itemprop="bestRating" content="5"><meta itemprop="ratingValue" co' \
+                       'ntent="4"></div><div class="product_review-item_date">1 листопада 2019, 11:23</div></div><div class="product_rev' \
+                       'iew-item_body"><div class="product_review-item_text" itemprop="reviewBody"><p>Долго выбирал себе новенький смартфон ' \
+                       'и вот наконец-то прислушался к советам знакомых и купил модель Blackview BV55 в этом магазине. Мне сразу же понравилос' \
+                       'ь оформление телефона, краска на корпусе со временем не начала затираться и вообще выглядит неплохо. Экран достаточно' \
+                       ' яркий и насыщенный, нет никакой пиксилизации. Памяти мне хватает для работы с большим количеством программ и большой га' \
+                       'лереи. Кстати, единственным минусом стала камера. Аккумулятор достаточно долго держит заряд и не нагревается особо. Сни' \
+                       'мки получаются размытыми и тусклыми, как бы ее не настраивал, все равно результат один и тот же. </p></div><div class="' \
+                       'product_review-item_advantages"><div class="product_review-item_advantages_title">Переваги:</div><div class="product_re' \
+                       'view-item_advantages_text"> Громкость динамиков, емкость батарейки, привлекательное оформление, не нагревается, яркость' \
+                       ' дисплея. </div></div><div class="product_review-item_advantages negative"><div class="product_review-item_advantages_t' \
+                       'itle">Недоліки:</div><div class="product_review-item_advantages_text"> Плохая работа камеры. </div></div></div><div cla' \
+                       'ss="product_review-item_footer"><div class="product_review-item_footer_section"><div class="product_review-item_to-answe' \
+                       'r js-answer-form-btn-action">Відповісти</div></div><div class="product_review-item_likes positive"><div class="product_rev' \
+                       'iew-item_likes_text"> Відгук був корисний? </div><button id="like-comment-1" data-product_id="452507" data-id="725068" dat' \
+                       'a-gtm-track="likeComment" class="product_review-item_likes_btn js-positive-like"></button><div class="product_review-item_' \
+                       'likes_count js-count-like"></div></div></div></div><div class="product_answer-form-holder js-answer-form-holder"></div></' \
+                       'div></div><div class="product_review-item js-comment-item"><div class="product_review-item_img empty"><span>В</span></div' \
+                       '><div class="product_review-item_content" id="comment_727701"><div class="product_review-item_block js-review-item-block" ' \
+                       'itemprop="review" itemscope="" itemtype="http://schema.org/Review" id="comment_727701"><meta itemprop="name" content="Смар' \
+                       'тфон Blackview BV5500Pro 3/16GB DS Black UA-VF"><div class="product_review-item_head"><div class="product_review-item_use' \
+                       'rname" itemprop="author">Влад</div><div class="product_review-item_rate"><div class="rate-star_container"><div class="rat' \
+                       'e-star active-start"></div><div class="rate-star active-start"></div><div class="rate-star active-start"></div><div class' \
+                       '="rate-star active-start"></div><div class="rate-star active-start"></div></div></div><div class="h' \
+                       'idden_comment" itemprop="reviewRating" itemscope="" itemtype="http://schema.org/Rating"><meta itemprop="worstRating" ' \
+                       'content="0"><meta itemprop="bestRating" content="5"><meta itemprop="ratingValue" content="5"></div><div class="produ' \
+                       'ct_review-item_date">16 листопада 2019, 07:49</div></div><div class="product_review-item_body"><div class="product_re' \
+                       'view-item_text" itemprop="reviewBody"><p>Какое время работы в режиме прослушивания музыки у этого смартфона?</p></div><' \
+                       'div class="product_review-item_advantages"><div class="product_review-item_advantages_title">Переваги:</div><div class="' \
+                       'product_review-item_advantages_text"></div></div><div class="product_review-item_advantages negative"><div class="produc' \
+                       't_review-item_advantages_title">Недоліки:</div><div class="product_review-item_advantages_text"></div></div></div><div cl' \
+                       'ass="product_review-item_footer"><div class="product_review-item_footer_section"><div class="product_review-item_to-answ' \
+                       'er js-answer-form-btn-action">Відповісти</div><div class="product_review-item_answers-count js-show-answers">1 Відповідь ' \
+                       '</div></div><div class="product_review-item_likes positive"><div class="product_review-item_likes_text"> Відгук був корисн' \
+                       'ий? </div><button id="like-comment-2" data-product_id="452507" data-id="727701" data-gtm-track="likeComment" class="product' \
+                       '_review-item_likes_btn js-positive-like"></button><div class="product_review-item_likes_count js-count-like"></div></div></' \
+                       'div></div><div class="product_answer-form-holder js-answer-form-holder"></div><div class="product_review-item_answers js-answe' \
+                       'r-wrap"><div class="product_review-item js-comment-item"><div class="product_review-item_img empty"><span>М</span></div><div cl' \
+                       'ass="product_review-item_content" id="comment_727702"><div class="product_review-item_block js-review-item-block" itemprop="revi' \
+                       'ew" itemscope="" itemtype="http://schema.org/Review" id="comment_727702"><meta itemprop="name" content=""><div class="product_rev' \
+                       'iew-item_head"><div class="product_review-item_username" itemprop="author">Менеджер</div><div class="product_review-item_date">16 ' \
+                       'листопада 2019, 06:18</div></div><div class="product_review-item_body"><div class="product_review-item_text" itemprop="reviewBody">' \
+                       '<p>Здравствуйте, Влад. 30 часов в режиме прослушивания музыки</p></div></div></div><div class="product_answer-form-holder js-answer' \
+                       '-form-holder"></div></div></div></div></div></div>'
+    print(clear_moyo_reviews_html(raw_html_reviews))
