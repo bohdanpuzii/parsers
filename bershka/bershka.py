@@ -23,7 +23,7 @@ def clear_bershka_characteristics_html(raw_characteristics):
         for h3 in div.select('h3'):
             characteristics_list.append(h3.text)
             characteristics_list.append(div.select('p')[0].text)
-    return (list(map(lambda string: string.strip(' '), characteristics_list)))
+    return list(map(lambda string: string.strip(' '), characteristics_list))
 
 
 def pretty_bershka_characteristics(chars_list):
