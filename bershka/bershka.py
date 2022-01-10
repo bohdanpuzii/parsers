@@ -1,19 +1,19 @@
 from bs4 import BeautifulSoup
 
-raw_description = '<h2>Опис</h2> <div class="model-wrapper"><p class="model">Розмір моделі: 36</p><p class="model">Висота моделі: ' \
-      '175 cm</p></div> <p class="description">Колір: Світло-синій</p> <!----> <!---->'
+raw_description_html = '<h2>Опис</h2> <div class="model-wrapper"></div> <p class="description">Колір: ЧОРНИЙ</p> <p ' \
+                  'class="description">Висота підборів: 8,5&nbsp;см.</p> <p class="description">Black high-heel ankle' \
+                  ' boots. Stretch material. Pointed toe. Sporty sole.</p>'
 
-raw_chars = '<h2>Склад</h2> <article class="composition"><h3>MAIN FABRIC</h3> <p>86% cotton</p></article><article cla' \
-            'ss="composition"><h3>MAIN FABRIC</h3> <p>14% polyester</p></article><article class="composition"><h3>DET' \
-            'AILS</h3> <p>97% cotton</p></article><article class="composition"><h3>DETAILS</h3> <p>3% elastane</p></article>'
+raw_characteristics_html = '<h2>Склад</h2><article class="composition"><h3>Верх</h3><p>100% поліестер</p></article><article class="co' \
+            'mposition"><h3>Підкладка</h3><p>80% поліуретан</p><p>20% поліестер</p></article><article class="compositio' \
+            'n"><h3>Підошва</h3><p>90% поліуретановий термопластик</p><p>10% поліуретан</p></article>'
 
 
-def clear_bershka_description_html(raw_characteristics):
+def clear_bershka_description_html(raw_description):
     characteristics_list = []
-    soup = BeautifulSoup(raw_characteristics, 'html.parser')
-    for div in soup.select('div'):
-        for p in div.select('p'):
-            characteristics_list.append(p.text)
+    soup = BeautifulSoup(raw_description, 'html.parser')
+    for p in soup.select('p'):
+        characteristics_list.append(p.text)
     return '\n'.join(list(map(lambda string: string.strip(' '), characteristics_list)))
 
 
@@ -22,16 +22,10 @@ def clear_bershka_characteristics_html(raw_characteristics):
     soup = BeautifulSoup(raw_characteristics, 'html.parser')
     for div in soup.select('article'):
         for h3 in div.select('h3'):
-            characteristics_list.append(h3.text)
-            characteristics_list.append(div.select('p')[0].text)
-    return list(map(lambda string: string.strip(' '), characteristics_list))
-
-
-def pretty_bershka_characteristics(chars_list):
-    grouped_by_2 = [chars_list[i:i+2] for i in range(0, len(chars_list), 2)]
-    return '\n'.join(list(map(' : '.join, grouped_by_2)))
+            characteristics_list.append(h3.text + ': ' + div.select('p')[0].text)
+    return '\n'.join(characteristics_list)
 
 
 if __name__ == '__main__':
-    print((clear_bershka_description_html(raw_description)))
-    print((pretty_bershka_characteristics(clear_bershka_characteristics_html(raw_chars))))
+    print(clear_bershka_description_html(raw_description_html))
+    print(clear_bershka_characteristics_html(raw_characteristics_html))
