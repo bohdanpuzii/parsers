@@ -14,7 +14,7 @@ def clear_bershka_description_html(raw_description):
     soup = BeautifulSoup(raw_description, 'html.parser')
     for p in soup.select('p'):
         characteristics_list.append(p.text)
-    return '\n'.join(list(map(lambda string: string.strip(' '), characteristics_list)))
+    return '\n'.join(list(map(lambda string: string.strip(' ').replace(' ', ''), characteristics_list)))
 
 
 def clear_bershka_characteristics_html(raw_characteristics):
@@ -22,7 +22,7 @@ def clear_bershka_characteristics_html(raw_characteristics):
     soup = BeautifulSoup(raw_characteristics, 'html.parser')
     for div in soup.select('article'):
         for h3 in div.select('h3'):
-            characteristics_list.append(h3.text + ': ' + div.select('p')[0].text)
+            characteristics_list.append(h3.text + ':' + div.select('p')[0].text)
     return '\n'.join(characteristics_list)
 
 
