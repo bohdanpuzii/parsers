@@ -1,19 +1,18 @@
 from bs4 import BeautifulSoup
 
-raw_description_html = '<h2>Опис</h2> <div class="model-wrapper"></div> <p class="description">Колір: ЧОРНИЙ</p> <p ' \
-                  'class="description">Висота підборів: 8,5&nbsp;см.</p> <p class="description">Black high-heel ankle' \
-                  ' boots. Stretch material. Pointed toe. Sporty sole.</p>'
+raw_description_html = '<h2>Опис</h2> <div class="model-wrapper"><p class="model"> Розмір моделі: S </p><p class="model"> ' \
+                       'Висота моделі: 177 cm </p></div> <p class="description"> Колір: Зелений </p> <!----> <!---->'
 
-raw_characteristics_html = '<h2>Склад</h2><article class="composition"><h3>Верх</h3><p>100% поліестер</p></article><article class="co' \
-            'mposition"><h3>Підкладка</h3><p>80% поліуретан</p><p>20% поліестер</p></article><article class="compositio' \
-            'n"><h3>Підошва</h3><p>90% поліуретановий термопластик</p><p>10% поліуретан</p></article>'
+raw_characteristics_html = '<h2>Склад</h2> <article class="composition"><h3>Зовнішня сторона</h3> <p>\n 100% поліестер\n ' \
+                           '</p></article><article class="composition"><h3>Підкладка</h3> <p>\n 100% поліестер\n </p>' \
+                           '</article><article class="composition"><h3>Внутрішня сторона</h3> <p>\n 100% поліестер\n </p></article>'
 
 
 def clear_bershka_description_html(raw_description):
     characteristics_list = []
     soup = BeautifulSoup(raw_description, 'html.parser')
     for p in soup.select('p'):
-        characteristics_list.append(p.text)
+        characteristics_list.append(p.text.replace('\n', ''))
     return '\n'.join(list(map(lambda string: string.strip(' ').replace(' ', ''), characteristics_list)))
 
 
@@ -22,7 +21,7 @@ def clear_bershka_characteristics_html(raw_characteristics):
     soup = BeautifulSoup(raw_characteristics, 'html.parser')
     for div in soup.select('article'):
         for h3 in div.select('h3'):
-            characteristics_list.append(h3.text + ':' + div.select('p')[0].text)
+            characteristics_list.append(h3.text + ':' + div.select('p')[0].text.replace('\n', ''))
     return '\n'.join(characteristics_list)
 
 
